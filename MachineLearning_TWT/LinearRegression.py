@@ -32,6 +32,13 @@ def loadModel(filename):
         file = open("{}.pickle".format(filename), "rb")
         return pickle.load(file)
 
+def visualizeData(data, dToX, dToY):
+        style.use("ggplot")
+        pyplot.scatter(data[dToX], data[dToY])
+        pyplot.xlabel(dToX)
+        pyplot.ylabel(dToY)
+        pyplot.show
+
 # get data needed
 data = loadCSV("student-data_set", ["G1", "G2", "G3", "studytime", "failures", "absences"])
 predict = "G3"
@@ -43,13 +50,13 @@ y = np.array(data[predict])
 # for i in range(500):
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, test_size=0.1)
 #         # generate the linear regression (y = mx+b) with the train
-#         linear = linear_model.LinearRegression()
-#         linear.fit(x_train, y_train)
-#         accuracy = linear.score(x_test, y_test) # the percent accuracy
+linear = linear_model.LinearRegression()
+linear.fit(x_train, y_train)
+accuracy = linear.score(x_test, y_test) # the percent accuracy
 #         if accuracy > best:
 #                 best = accuracy
-#                 print("Until now {}".format(accuracy))
-#                 saveModel("studentModel_{}_".format(accuracy*100), linear)
+print("Until now {}".format(accuracy))
+saveModel("studentModel", linear)
 linear = loadModel("studentModel")
 
 #print("\nacc :",accuracy ) # percent so relative
@@ -61,3 +68,5 @@ print("Predictions: \n")
 predictions = linear.predict(x_test)
 for i in range(len(predictions)):
     print(predictions[i], "\t\t", x_test[i], "\t\t", y_test[i])
+
+visualizeData(data, "G2","studytime")
